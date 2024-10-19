@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block title %}Home - My Django App{% endblock %}
+
+{% block content %}
+<div class="row mt-4">
+    <div class="col-md-8">
+        <!-- Create Post Section -->
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="card-title">Create a Post</h5>
+                <form>
+                    <div class="mb-3">
+                        <textarea class="form-control" rows="3" placeholder="What's on your mind?"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Post</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Posts Feed Section -->
+        <div class="feed">
+            <h4>Recent Posts</h4>
+            {% for post in posts %}
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h6 class="card-subtitle mb-2 text-muted">{{ post.username }}</h6>
+                        <p class="card-text">{{ post.content }}</p>
+                        <div>
+                            <button class="btn btn-sm btn-outline-primary">Like ({{ post.likes }})</button>
+                            <button class="btn btn-sm btn-outline-secondary">Comment ({{ post.comments }})</button>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Sidebar Section (optional, e.g., for friend requests, ads) -->
+    <div class="col-md-4">
+        <div class="card mb-3">
+            <div class="card-body">
+                <h5 class="card-title">Friend Requests</h5>
+                <p class="card-text">No new requests</p>
+            </div>
+        </div>
+
+        <div class="card mb-3">
+            <div class="card-body">
+                <h5 class="card-title">Sponsored</h5>
+                <p class="card-text">This could be an ad.</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
