@@ -14,6 +14,7 @@ class CustomUserManager(BaseUserManager):
         email = self.normalize_email(email)
         user = self.model(email=email, username=username, contact_number=contact_number)
         user.set_password(password)
+        user.is_approved = False  # Set to False initially
         user.save(using=self._db)
         return user
 
@@ -21,18 +22,19 @@ class CustomUserManager(BaseUserManager):
         user = self.create_user(email, username, contact_number, password)
         user.is_staff = True
         user.is_superuser = True
+        user.is_approved = True  # Superusers are automatically approved
         user.save(using=self._db)
         return user
 
-
 class CustomUser(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(unique=True)
-    username = models.CharField(max_length=150, unique=True,)
+    username = models.CharField(max_length=150, unique=True)
     contact_number = models.CharField(max_length=15, unique=True)
 
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     date_joined = models.DateTimeField(default=timezone.now)
+    is_approved = models.BooleanField(default=False)  # New field for approval status
 
     objects = CustomUserManager()
 

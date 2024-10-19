@@ -1,35 +1,5 @@
-{% extends "base.html" %}
-
-{% block title %}Register{% endblock %}
-
-{% block content %}
-<div class="row justify-content-center mt-5">
-    <div class="col-md-6">
-        <h2 class="text-center">Register</h2>
-        <form method="POST" class="mt-4">
-            {% csrf_token %}
-            <div class="form-group mb-3">
-                {{ form.email.label_tag }}
-                {{ form.email|add_class:"form-control" }}
-            </div>
-            <div class="form-group mb-3">
-                {{ form.username.label_tag }}
-                {{ form.username|add_class:"form-control" }}
-            </div>
-            <div class="form-group mb-3">
-                {{ form.contact_number.label_tag }}
-                {{ form.contact_number|add_class:"form-control" }}
-            </div>
-            <div class="form-group mb-3">
-                {{ form.password1.label_tag }}
-                {{ form.password1|add_class:"form-control" }}
-            </div>
-            <div class="form-group mb-3">
-                {{ form.password2.label_tag }}
-                {{ form.password2|add_class:"form-control" }}
-            </div>
-            <button type="submit" class="btn btn-primary btn-block">Register</button>
-        </form>
-    </div>
-</div>
-{% endblock %}
+<form method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Register</button>
+</form>

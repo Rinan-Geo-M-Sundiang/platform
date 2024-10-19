@@ -1,56 +1,41 @@
 {% extends 'base.html' %}
 
-{% block title %}Home - My Django App{% endblock %}
-
 {% block content %}
-<div class="row mt-4">
-    <div class="col-md-8">
-        <!-- Create Post Section -->
-        <div class="card mb-4">
-            <div class="card-body">
-                <h5 class="card-title">Create a Post</h5>
-                <form>
-                    <div class="mb-3">
-                        <textarea class="form-control" rows="3" placeholder="What's on your mind?"></textarea>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Post</button>
-                </form>
-            </div>
-        </div>
+<div class="container mt-4">
+    <h2>Recent Posts</h2>
+  <a href="{% url 'create_post' %}" class="btn btn-success mb-4">Create a Post</a>
 
-        <!-- Posts Feed Section -->
-        <div class="feed">
-            <h4>Recent Posts</h4>
-            {% for post in posts %}
-                <div class="card mb-3">
-                    <div class="card-body">
-                        <h6 class="card-subtitle mb-2 text-muted">{{ post.username }}</h6>
-                        <p class="card-text">{{ post.content }}</p>
-                        <div>
-                            <button class="btn btn-sm btn-outline-primary">Like ({{ post.likes }})</button>
-                            <button class="btn btn-sm btn-outline-secondary">Comment ({{ post.comments }})</button>
-                        </div>
-                    </div>
-                </div>
-            {% endfor %}
+    {% for post in posts %}
+    <div class="card mb-3">
+        <div class="card-body">
+            <h6 class="card-subtitle mb-2 text-muted">{{ post.username }}</h6>
+            <p class="card-text">
+                {% if post.truncated %}
+                    {{ post.content }}
+                    <a href="#" data-post-id="{{ post.post_id }}" class="see-more-link">See More</a>
+                    <span class="full-content" id="post-{{ post.post_id }}" style="display:none;">{{ post.original_content }}</span>
+                {% else %}
+                    {{ post.content }}
+                {% endif %}
+            </p>
+            <small class="text-muted">Posted on {{ post.created_at }}</small>
         </div>
     </div>
-
-    <!-- Sidebar Section (optional, e.g., for friend requests, ads) -->
-    <div class="col-md-4">
-        <div class="card mb-3">
-            <div class="card-body">
-                <h5 class="card-title">Friend Requests</h5>
-                <p class="card-text">No new requests</p>
-            </div>
-        </div>
-
-        <div class="card mb-3">
-            <div class="card-body">
-                <h5 class="card-title">Sponsored</h5>
-                <p class="card-text">This could be an ad.</p>
-            </div>
-        </div>
-    </div>
+    {% endfor %}
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const seeMoreLinks = document.querySelectorAll('.see-more-link');
+    seeMoreLinks.forEach(link => {
+        link.addEventListener('click', function(event) {
+            event.preventDefault();
+            const postId = this.getAttribute('data-post-id');
+            const fullContent = document.getElementById('post-' + postId);
+            this.style.display = 'none';  // Hide 'See More'
+            fullContent.style.display = 'block';  // Show full content
+        });
+    });
+});
+</script>
 {% endblock %}
